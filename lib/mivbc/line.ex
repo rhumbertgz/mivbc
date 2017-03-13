@@ -1,5 +1,5 @@
 defmodule MIVBC.Line do
-  
+
   @moduledoc """
   This module ...
 
@@ -8,5 +8,5 @@ defmodule MIVBC.Line do
 
   """
   @derive [Poison.Encoder]
-  defstruct lineId: 0, vehiclePositions: []
+  defstruct lineId: 0, vehiclePositions: [%MIVBC.VehiclePosition{}]
 end
