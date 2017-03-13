@@ -20,7 +20,13 @@ defmodule MIVBC do
   end
 
   @doc """
-  Returns the position of vehicles of the specified `lines`.
+  Returns the position of vehicles of the specified `line(s)`.
+
+  ## Examples
+      iex> MIVBC.start
+      iex> MIVBC.vehicle_position_by_Line 7
+      iex> MIVBC.vehicle_position_by_Line [7, 25]
+
   """
   def vehicle_position_by_Line(lines) do
     {:ok, response} = get(@vehiclePosByLine, lines)
@@ -28,7 +34,13 @@ defmodule MIVBC do
   end
 
   @doc """
-  Returns next vehicle passing times at the specified `stop-points`.
+  Returns next vehicle passing times at the specified `stop-point(s)`.
+
+  ## Examples
+      iex> MIVBC.start
+      iex> MIVBC.passing_time_by_point 5759
+      iex> MIVBC.passing_time_by_point [5759, 9056]
+
   """
   def passing_time_by_point(stops) do
     {:ok, response} = get(@passingTimeByPoint, stops)
@@ -55,8 +67,8 @@ defmodule MIVBC do
     value.lines
   end
 
-  defp encode_params(line) when is_integer line do
-    Integer.to_string(line)
+  defp encode_params(param) when is_integer param do
+    Integer.to_string(param)
   end
 
   defp encode_params([]) do
