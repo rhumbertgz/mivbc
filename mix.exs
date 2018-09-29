@@ -3,7 +3,7 @@ defmodule MIVBC.Mixfile do
 
   def project do
     [app: :mivbc,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -27,8 +27,8 @@ defmodule MIVBC.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [{:httpoison, "~> 0.11.1"},
-     {:poison, "~> 3.0"}
+    [{:httpoison, "~> 1.3.1"},
+     {:poison, "~> 4.0.1"}
     ]
   end
 end
