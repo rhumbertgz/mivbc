@@ -1,6 +1,6 @@
 # MIVBC
 
-**TODO: Add description**
+Elixir client for the MIVB Open-Data API
 
 ## Installation
 
