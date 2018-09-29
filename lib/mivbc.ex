@@ -1,12 +1,10 @@
 defmodule MIVBC do
   @moduledoc """
-  MIVBC module ...
+  Client for the MIVB Open-Data API
   """
 
   # Attributes
-  @token "ebc7bd3c2764c42c6f836c85f72b5bcc"
-  @headers ["Authorization": "Bearer #{@token}", "Accept": "application/json"]
-  @endpoint "https://opendata-api.stib-mivb.be/OperationMonitoring/1.0/"
+  @endpoint "https://opendata-api.stib-mivb.be/OperationMonitoring/3.0/"
   @vehiclePosByLine "VehiclePositionByLine/"
   @passingTimeByPoint "PassingTimeByPoint/"
 
@@ -24,12 +22,12 @@ defmodule MIVBC do
 
   ## Examples
       iex> MIVBC.start
-      iex> MIVBC.vehicle_position_by_Line 7
-      iex> MIVBC.vehicle_position_by_Line [7, 25]
+      iex> MIVBC.vehicle_position_by_Line 7, mytoken
+      iex> MIVBC.vehicle_position_by_Line [7, 25], mytoken
 
   """
-  def vehicle_position_by_Line(lines) do
-    {:ok, response} = get(@vehiclePosByLine, lines)
+  def vehicle_position_by_Line(lines, token) do
+    {:ok, response} = get(@vehiclePosByLine, lines, token)
     process_response(:vehiclePosByLine, response)
   end
 
@@ -38,22 +36,24 @@ defmodule MIVBC do
 
   ## Examples
       iex> MIVBC.start
-      iex> MIVBC.passing_time_by_point 5759
-      iex> MIVBC.passing_time_by_point [5759, 9056]
+      iex> MIVBC.passing_time_by_point 5759, mytoken
+      iex> MIVBC.passing_time_by_point [5759, 9056], mytoken
 
   """
-  def passing_time_by_point(stops) do
-    {:ok, response} = get(@passingTimeByPoint, stops)
+  def passing_time_by_point(stops, token) do
+    {:ok, response} = get(@passingTimeByPoint, stops, token)
     process_response(:passingTimeByPoint, response)
   end
 
-
   # Utilities functions
-  defp get(service, params) do
+  defp get(service, params, token) do
       url = @endpoint <> service <> encode_params(params)
-      HTTPoison.get(url, @headers)
+      HTTPoison.get(url, build_headers(token))
   end
 
+  defp build_headers(token) do
+    ["Authorization": "Bearer #{token}", "Accept": "application/json"]
+  end
 
   defp process_response(:passingTimeByPoint, response) do
     value = response.body
