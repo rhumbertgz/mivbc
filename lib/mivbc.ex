@@ -27,8 +27,10 @@ defmodule MIVBC do
 
   """
   def vehicle_position_by_Line(lines, token) do
-    {:ok, response} = get(@vehiclePosByLine, lines, token)
-    process_response(:vehiclePosByLine, response)
+    case get(@vehiclePosByLine, lines, token) do
+      {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
+      {:ok, response} -> process_response(:vehiclePosByLine, response)
+    end
   end
 
   @doc """
@@ -41,8 +43,10 @@ defmodule MIVBC do
 
   """
   def passing_time_by_point(stops, token) do
-    {:ok, response} = get(@passingTimeByPoint, stops, token)
-    process_response(:passingTimeByPoint, response)
+    case get(@passingTimeByPoint, stops, token) do
+      {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
+      {:ok, response} -> process_response(:passingTimeByPoint, response)
+    end
   end
 
   # Utilities functions
