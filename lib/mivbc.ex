@@ -60,7 +60,7 @@ defmodule MIVBC do
   end
 
   defp process_response(:passingTimeByPoint, response) do
-    value = response.body
+     value = response.body
             |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
     value.points
   end
