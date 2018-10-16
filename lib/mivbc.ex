@@ -65,8 +65,9 @@ defmodule MIVBC do
       value = response.body
       |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
       value.points
-    catch
-      x -> Logger.error("MIVBC.process_response_passingTimeByPoint got: #{inspect x} processing: #{inspect response}")
+    rescue
+      e ->  content = :io_lib.format("~tp.~n", [e.message])
+            :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
            []
     end
 
@@ -75,12 +76,14 @@ defmodule MIVBC do
   defp process_response(:vehiclePosByLine, response) do
     try do
       value = response.body
-              |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
+      |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
       value.lines
-    catch
-      x -> Logger.error("MIVBC.process_response_vehiclePosByLine got: #{x} processing: #{response}")
+    rescue
+      e ->  content = :io_lib.format("~tp.~n", [e.message])
+            :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
            []
     end
+
   end
 
   defp encode_params(param) when is_integer param do
