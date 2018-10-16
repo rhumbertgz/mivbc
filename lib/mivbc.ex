@@ -2,6 +2,7 @@ defmodule MIVBC do
   @moduledoc """
   Client for the MIVB Open-Data API
   """
+  require Logger
 
   # Attributes
   @endpoint "https://opendata-api.stib-mivb.be/OperationMonitoring/3.0/"
@@ -65,7 +66,8 @@ defmodule MIVBC do
       |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
       value.points
     catch
-      _ -> []
+      x -> Logger.error("MIVBC.process_response_passingTimeByPoint got: #{inspect x} processing: #{inspect response}")
+           []
     end
 
   end
@@ -76,7 +78,8 @@ defmodule MIVBC do
               |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
       value.lines
     catch
-      _ -> []
+      x -> Logger.error("MIVBC.process_response_vehiclePosByLine got: #{x} processing: #{response}")
+           []
     end
   end
 
