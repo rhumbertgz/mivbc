@@ -60,15 +60,24 @@ defmodule MIVBC do
   end
 
   defp process_response(:passingTimeByPoint, response) do
-     value = response.body
-            |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
-    value.points
+    try do
+      value = response.body
+      |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
+      value.points
+    catch
+      _ -> []
+    end
+
   end
 
   defp process_response(:vehiclePosByLine, response) do
-    value = response.body
-            |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
-    value.lines
+    try do
+      value = response.body
+              |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
+      value.lines
+    catch
+      _ -> []
+    end
   end
 
   defp encode_params(param) when is_integer param do
