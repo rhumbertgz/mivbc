@@ -62,6 +62,7 @@ defmodule MIVBC do
 
   defp process_response(:passingTimeByPoint, response) do
     try do
+      Logger.info("MIVBC.process_response #{inspect response.body}")
       value = response.body
       |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
       value.points
@@ -75,6 +76,7 @@ defmodule MIVBC do
 
   defp process_response(:vehiclePosByLine, response) do
     try do
+      Logger.info("MIVBC.process_response #{inspect response.body}")
       value = response.body
       |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
       value.lines
