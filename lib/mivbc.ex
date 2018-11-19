@@ -5,9 +5,11 @@ defmodule MIVBC do
   require Logger
 
   # Attributes
-  @endpoint "https://opendata-api.stib-mivb.be/OperationMonitoring/3.0/"
-  @vehiclePosByLine "VehiclePositionByLine/"
-  @passingTimeByPoint "PassingTimeByPoint/"
+  @endpoint "https://opendata-api.stib-mivb.be/"
+  @vehiclePosByLine "OperationMonitoring/3.0/VehiclePositionByLine/"
+  @passingTimeByPoint "OperationMonitoring/3.0/PassingTimeByPoint/"
+  @pointByLine "NetworkDescription/1.0/PointByLine/"
+  @pointDetail "NetworkDescription/1.0/PointDetail/"
 
   #MIVBC API
 
@@ -50,6 +52,40 @@ defmodule MIVBC do
     end
   end
 
+  @doc """
+  Returns an array of “points” and every point item contains the point id,
+  the geolocation of the point and the name in French and Dutch
+
+  ## Examples
+      iex> MIVBC.start
+      iex> MIVBC.point_detail 5759, mytoken
+      iex> MIVBC.point_detail [5759, 9056], mytoken
+
+  """
+  def point_detail(stops, token) do
+    case get(@pointDetail, stops, token) do
+      {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
+      {:ok, response} -> process_response(:pointDetail, response)
+    end
+  end
+
+  @doc """
+  Returns an array of “lines”. Every line item contains two directions.
+  Every direction returns a list of points ids (a.k.a stop ids) where the vehicle passes by.
+
+  ## Examples
+      iex> MIVBC.start
+      iex> MIVBC.point_by_line 5759, mytoken
+      iex> MIVBC.point_by_line [5759, 9056], mytoken
+
+  """
+  def point_by_line(stops, token) do
+    case get(@pointByLine, stops, token) do
+      {:error, %HTTPoison.Error{reason: reason}} -> {:error, reason}
+      {:ok, response} -> process_response(:pointByLine, response)
+    end
+  end
+
   # Utilities functions
   defp get(service, params, token) do
       url = @endpoint <> service <> encode_params(params)
@@ -63,27 +99,49 @@ defmodule MIVBC do
   defp process_response(:passingTimeByPoint, response) do
     try do
       value = response.body
-      |> Poison.decode!(as: %MIVBC.Points{points: [%MIVBC.Point{passingTimes: [%MIVBC.ArrivalTime{}]}]})
+      |> Poison.decode!(as: %MIVBC.PassingTimeByPoint.Reponse{})
       value.points
     rescue
       e ->  content = :io_lib.format("~tp.~n", [e.message])
             :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
            []
     end
-
   end
 
   defp process_response(:vehiclePosByLine, response) do
     try do
       value = response.body
-      |> Poison.decode!(as: %MIVBC.Lines{lines: [%MIVBC.Line{vehiclePositions: [%MIVBC.VehiclePosition{}]}]})
+      |> Poison.decode!(as: %MIVBC.VehiclePositionByLine.Response{})
       value.lines
     rescue
       e ->  content = :io_lib.format("~tp.~n", [e.message])
             :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
            []
     end
+  end
 
+  defp process_response(:pointByLine, response) do
+    try do
+      value = response.body
+      |> Poison.decode!(as: %MIVBC.PointByLine.Response{})
+      value.lines
+    rescue
+      e ->  content = :io_lib.format("~tp.~n", [e.message])
+            :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
+           []
+    end
+  end
+
+  defp process_response(:pointDetail, response) do
+    try do
+      value = response.body
+      |> Poison.decode!(as: %MIVBC.PointDetail.Response{})
+      value.points
+    rescue
+      e ->  content = :io_lib.format("~tp.~n", [e.message])
+            :file.write_file("logs/mivbc#{System.monotonic_time}.err", content)
+           []
+    end
   end
 
   defp encode_params(param) when is_integer param do

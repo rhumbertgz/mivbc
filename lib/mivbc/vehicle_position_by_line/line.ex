@@ -1,4 +1,4 @@
-defmodule MIVBC.Line do
+defmodule MIVBC.VehiclePositionByLine.Line do
 
   @moduledoc """
   This module ...
@@ -7,6 +7,5 @@ defmodule MIVBC.Line do
   `vehiclePositions` is a list MIVBC.VehiclePosition struct
 
   """
-  @derive [Poison.Encoder]
-  defstruct lineId: 0, vehiclePositions: [%MIVBC.VehiclePosition{}]
+  defstruct lineId: 0, vehiclePositions: [%MIVBC.VehiclePositionByLine.Vehicle{}]
 end
