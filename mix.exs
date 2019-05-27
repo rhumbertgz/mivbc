@@ -16,8 +16,9 @@ defmodule MIVBC.Mixfile do
   end
 
   defp deps do
-    [{:httpoison, "~> 1.3.1"},
-     {:poison, "~> 3.0"}
+    [{:httpoison, "~> 1.5.1"},
+     {:poison, "~> 4.0.1"}
     ]
   end
 end
+cf7c31e115fe70c2f18c71d97890cccd
