@@ -14,13 +14,6 @@ defmodule MIVBC do
   #MIVBC API
 
   @doc """
-  Ensures the httpoison app is started
-  """
-  def start do
-    Application.ensure_started(:httpoison)
-  end
-
-  @doc """
   Returns the position of vehicles of the specified `line(s)`.
 
   ## Examples
