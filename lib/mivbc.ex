@@ -17,7 +17,7 @@ defmodule MIVBC do
   Returns the position of vehicles of the specified `line(s)`.
 
   ## Examples
-      iex> MIVBC.start
+      
       iex> MIVBC.vehicle_position_by_Line 7, mytoken
       iex> MIVBC.vehicle_position_by_Line [7, 25], mytoken
 
@@ -33,7 +33,7 @@ defmodule MIVBC do
   Returns next vehicle passing times at the specified `stop-point(s)`.
 
   ## Examples
-      iex> MIVBC.start
+
       iex> MIVBC.passing_time_by_point 5759, mytoken
       iex> MIVBC.passing_time_by_point [5759, 9056], mytoken
 
@@ -50,7 +50,7 @@ defmodule MIVBC do
   the geolocation of the point and the name in French and Dutch
 
   ## Examples
-      iex> MIVBC.start
+
       iex> MIVBC.point_detail 5759, mytoken
       iex> MIVBC.point_detail [5759, 9056], mytoken
 
@@ -67,7 +67,7 @@ defmodule MIVBC do
   Every direction returns a list of points ids (a.k.a stop ids) where the vehicle passes by.
 
   ## Examples
-      iex> MIVBC.start
+
       iex> MIVBC.point_by_line 5759, mytoken
       iex> MIVBC.point_by_line [5759, 9056], mytoken
 
