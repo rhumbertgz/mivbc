@@ -6,8 +6,8 @@ defmodule MIVBC do
 
   # Attributes
   @endpoint "https://opendata-api.stib-mivb.be/"
-  @vehiclePosByLine "OperationMonitoring/3.0/VehiclePositionByLine/"
-  @passingTimeByPoint "OperationMonitoring/3.0/PassingTimeByPoint/"
+  @vehiclePosByLine "OperationMonitoring/4.0/VehiclePositionByLine/"
+  @passingTimeByPoint "OperationMonitoring/4.0/PassingTimeByPoint/"
   @pointByLine "NetworkDescription/1.0/PointByLine/"
   @pointDetail "NetworkDescription/1.0/PointDetail/"
 
